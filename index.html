@@ -5,9 +5,60 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Simple Site</title>
 	<link rel="stylesheet" href="index.css">
+	<style>
+		.modal-iframe-container {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(0,0,0,0.3);
+			z-index: 9999;
+		}
+		.modal-iframe {
+			width: 400px;
+			height: 300px;
+			border: none;
+			border-radius: 12px;
+			box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+			background: #fff;
+		}
+	</style>
+	<script>
+	function inject() {
+		const container = document.createElement('div');
+		container.className = 'modal-iframe-container';
+		const iframe = document.createElement('iframe');
+		iframe.src = 'http://localhost/wmTests/#';
+		iframe.className = 'modal-iframe';
+		container.appendChild(iframe);
+		document.body.appendChild(container);
+		// Hide modal on any interaction inside iframe
+		iframe.onload = function() {
+			iframe.contentWindow.document.body.addEventListener('click', function() {
+				container.style.display = 'none';
+			});
+			iframe.contentWindow.document.body.addEventListener('keydown', function() {
+				container.style.display = 'none';
+			});
+		};
+		// Hide modal on click outside iframe
+		container.addEventListener('click', function(e) {
+			if (e.target === container) {
+				container.style.display = 'none';
+			}
+		});
+	}
+	</script>
 </head>
 <body>
 	<h1>Welcome to My Simple Site</h1>
 	<p>This is a very basic web page.</p>
+	<script>
+		window.onload = inject;
+	</script>
 </body>
 </html>
